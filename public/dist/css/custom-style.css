@@ -1,0 +1,54 @@
+.portal_menu {
+	width: 100%;
+}
+
+.portal_menu li {
+	display: inline-block;
+}
+.alias_list {
+	height: 400px;
+	overflow-y: scroll;
+}
+ul.ui-autocomplete   {
+        z-index: 10189;
+        background: rgba(255,255,255, 1);
+        position: absolute;
+        overflow-y: scroll;
+        border: 1px solid #e5e5e5;
+        overflow-x: hidden;
+        max-height: 235px;
+        padding: 10px 5px;
+        }
+        ul.ui-autocomplete  li {
+            display: inline-block;
+            margin: 0 5px;
+            color: #333;
+            width: 100%;
+            cursor: pointer;
+        }
+        ul.ui-autocomplete  li:hover {
+            display: inline-block;
+            margin: 0 5px;
+            color: #333;
+            cursor: pointer;
+        }
+        ul.ui-autocomplete  li a{
+            font-size: 11px;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+            line-height: 1.5;
+            zoom: 1;
+            width: 100%;
+            color: #333;
+        }
+.table-responsive .form-group {
+    margin-right: 0; 
+    margin-left: 0; 
+}
+.table-responsive .editable-wrap {
+        white-space: pre-line;
+}
+.partnumberContainer label.text-left {
+    text-align: left;
+}
