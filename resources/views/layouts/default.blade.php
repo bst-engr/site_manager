@@ -141,22 +141,22 @@
             </span> -->
           </a>
         </li>
-        <li>
+        <!--<li>
           <a href="{{action('PortalsettingsController@index')}}">
             <i class="fa fa-th"></i> <span>Alias Builder</span>
-            <!-- <span class="pull-right-container">
+             <span class="pull-right-container">
               <small class="label pull-right bg-green">new</small>
-            </span> -->
+            </span> 
           </a>
-        </li>
-        <li>
+        </li>-->
+        <!-- <li>
           <a href="{{action('PortalsettingsController@index')}}">
             <i class="fa fa-th"></i> <span>Quotes Settings</span>
-            <!-- <span class="pull-right-container">
+            <span class="pull-right-container">
               <small class="label pull-right bg-green">new</small>
-            </span> -->
+            </span> 
           </a>
-        </li>
+        </li>-->
       </ul>
     </section>
     <!-- /.sidebar -->

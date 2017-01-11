@@ -54,14 +54,18 @@
          * @return {[type]} [description]
          */
         scope.deletePortal = function (id) {
-            Portal.deleteRecord(id).then(
-                function (res) { //success
-                    scope.customers = Portal.removeRow(scope.customers, id);
-                },
-                function (err) { // error callback
-
-                }
-            )
+            if(confirm("Are you sure to delete this portal?")) {
+                $('section.content').showLoader();
+                Portal.deleteRecord(id).then(
+                    function (res) { //success
+                        $('section.content').hideLoader();
+                        scope.customers = Portal.removeRow(scope.customers, id);
+                    },
+                    function (err) { // error callback
+                        $('section.content').hideLoader();
+                    }
+                )
+            }
         }
          /**
           * Scope Functions
@@ -70,56 +74,18 @@
             httpService.resetLocalStorage('portalState');// resetting local storage.
             scope.state.fkCustomerID = id; //setting customer id
             window.location= httpService.getUrl('portal/edit/setting/'+id);
-            //call to prepare all customer settings to view on edit screen
-            /*Portal.getPortalDetails(id).then(
-                function (res) { //success
-                    scope.baseForm = res.data;
-                    scope.baseErrors = {};
-                    Portal.formFields = res.data;
-                    //preparing markup list.
-                    Markup.getCustomerMarkups(id, scope.baseForm.site_url).then(
-                        function (res) { //success
-                            console.log(res.data !== 'null');
-                            if(res.data !== 'null') {
-                                scope.markupList = res.data;
-                            }
-                        },
-                        function (err) { //error
-                            console.log(err);
-                        }
-                    );
-                    //preparing quote Settings
-                    Quote.getCustomerQuote(id).then(
-                        function (res) { //success
-                            console.log(res.data !== 'null');
-                            if(res.data !== 'null') {
-                                scope.quoteForm = res.data;
-                                Quote.formFields = res.data;
-                            }
-                        },
-                        function (err) { //error
-                            console.log(err);
-                        }
-                    );
-                    //search criteria
-                    scope.table_search = scope.baseForm.site_name; //setting model name
-                    //setting localstorage to use on edit screen
-                    httpService.setLocalStorage('portalState', scope, scope.state.propertiesToSave);
-                    window.location= httpService.getUrl('portal/settings/'+id);
-                },
-                function (err) { //error
-                    console.log(err);
-                }
-            );*/
         }
         //definition functions
         function LoadCustomersList() {
+            $('section.content').showLoader();
             Portal.getCustomers().then(
                 function(response){
+                    $('section.content').hideLoader();
                     console.log("ok response received");
                     scope.customers = response.data;
                 },
                 function(response){
+                    $('section.content').hideLoader();
                     console.log('there is something wrong please review');
                     return {};
                 }
@@ -139,6 +105,9 @@
             channel.bind('settings', function(data) {
                 scope.state.pusherNotification = true;
                 scope.state.pusherNotification = data.text;
+                if( data.reLoadCustomer == 'yes' ) {
+                    LoadCustomersList();
+                }
                 console.log(data);
             });
         }

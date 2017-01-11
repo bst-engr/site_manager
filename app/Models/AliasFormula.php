@@ -21,7 +21,7 @@ class AliasFormula extends Model
      *
      * @var string
      */
-    protected $table = 'site_manager_alias';
+    protected $table = 'fcm_site_manager_alias';
     /**
      * The attributes that are mass assignable.
      *
@@ -73,23 +73,30 @@ class AliasFormula extends Model
     public function getCustomerAliasFormula ($pkCustomerID) {
         
         $rows =  $this->where('fkCustomerID','=',$pkCustomerID)->select()->first();
-        if(count($rows) > 0)
-        return $rows;
-        else
-        return array('mtpPartString'=>'',
-                     'fiberPartString'=>'',
-                     'mtpDescString'=>'',
-                     'fiberDescString'=>'',
-                     'mtpPartSuffix'=>'',
-                     'fiberPartSuffix'=>'',
-                     'mtpDescSuffix'=>'',
-                     'fiberDescSuffix'=>'',
-                     'mtpPartPrefix'=>'',
-                     'fiberPartPrefix'=>'',
-                     'mtpDescPrefix'=>'',
-                     'fiberDescPrefix'=>'',
-                     'id'=>NULL,
-                     'fkCustomerID'=>'');    
+        if(count($rows) > 0) {
+            $rows['mtpPartString']= !empty($rows['mtpPartString']) ? $rows['mtpPartString'] : $this->getDefaultValue('mtpPartString');
+            $rows['fiberPartString']= !empty($rows['fiberPartString']) ? $rows['fiberPartString'] : $this->getDefaultValue('fiberPartString');
+            $rows['mtpDescString']= !empty($rows['mtpDescString']) ? $rows['mtpDescString'] : $this->getDefaultValue('mtpDescString');
+            $rows['fiberDescString']= !empty($rows['fiberDescString']) ? $rows['fiberDescString'] : $this->getDefaultValue('fiberDescString');
+            return $rows;
+        } else {
+            
+            return array(
+                        'mtpPartString'=>$this->getDefaultValue('mtpPartString'),
+                        'fiberPartString'=>$this->getDefaultValue('fiberPartString'),
+                        'mtpDescString'=>$this->getDefaultValue('mtpDescString'),
+                        'fiberDescString'=>$this->getDefaultValue('fiberDescString'),
+                        'mtpPartSuffix'=>'',
+                        'fiberPartSuffix'=>'',
+                        'mtpDescSuffix'=>'',
+                        'fiberDescSuffix'=>'',
+                        'mtpPartPrefix'=>'',
+                        'fiberPartPrefix'=>'',
+                        'mtpDescPrefix'=>'',
+                        'fiberDescPrefix'=>'',
+                        'id'=>NULL,
+                        'fkCustomerID'=>'');    
+        }
 
     } // alias formula ends here
  
@@ -112,5 +119,23 @@ class AliasFormula extends Model
             }
 
   }// formula Alias saved here
+
+  public function getDefaultValue($key) {
+    $defaults = array('mtpPartString'=>'{corePart}{strandsPart}{connectorAPart}{PolishAPart}{connectorBPart}{PolishBPart}{typePart}{shapePart}{colorPart}{pinoutPart}-{sizeunit}',
+                     'fiberPartString'=>'{corePart}{strandsPart}{connectorAPart}{PolishAPart}{connectorBPart}{PolishBPart}{typePart}{diameterPart}{colorPart}-{sizeunits}',
+                     'mtpDescString'=>'MTP/MPO {strandsDes} {coreDes} {connectorADes}/{PolishADes} to {connectorBDes}/{PolishBDes} {typeDes} {shapeDes} {colorDes} {pinoutDes} {sizeunit}',
+                     'fiberDescString'=>'Fiber Jumper {strandsDes} {coreDes} {connectorADes}/{PolishADes} to {connectorBDes}/{PolishBDes} {typeDes} {diameterDes} {colorDes} {sizeunit}',
+                     'mtpPartSuffix'=>'',
+                     'fiberPartSuffix'=>'',
+                     'mtpDescSuffix'=>'',
+                     'fiberDescSuffix'=>'',
+                     'mtpPartPrefix'=>'',
+                     'fiberPartPrefix'=>'',
+                     'mtpDescPrefix'=>'',
+                     'fiberDescPrefix'=>'',
+                     'id'=>NULL,
+                     );
+    return  $defaults[$key];
+  }
 
 }// class ends here 

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\App;
 use DB;
 
-class Color extends Model
+class Log extends Model
 {
     protected $pusher;
     /**
@@ -15,25 +15,23 @@ class Color extends Model
      *
      * @var bool
      */
-    public $timestamps = false;
+    public $timestamps = true;
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'fcm_site_manager_color';
+    protected $table = 'fcm_site_manager_logs';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id',
-        'loginButtonColor',
-        'signupButtonColor',
-        'configuratorColor',
-        'customPartColor',
-        'fkSiteId'
+        'updated_by',
+        'module',
+        'action',
+        'data_string'
     ];
 
     /**
@@ -41,12 +39,7 @@ class Color extends Model
      * @var array
      */
     public $nullFields = [
-        'id' => '',
-        'loginButtonColor' => '',
-        'signupButtonColor' => '',
-        'configuratorColor' => '',
-        'customPartColor' => '',
-        'fkSiteId' => ''
+        
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -77,6 +70,18 @@ class Color extends Model
         
     }
 
+    public function createLog($user, $module, $operation, $data, $oldData){
+        // var_dump($data);
+        // var_dump($oldData);
+        $this->fill(
+                    array(
+                        'updated_by'=> $user,
+                        'module'=> $module,
+                        'action'=> $operation,
+                        'data_string'=> json_encode(array('updatedData'=>$data, 'oldData'=> $oldData))
+                    )
+                )->save();
+    }
     
 
 }

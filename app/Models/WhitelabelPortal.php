@@ -4,7 +4,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\SoftDeletes; // <-- This is required
+use Illuminate\Database\Eloquent\SoftDeletes; // <-- required for soft deletion
 use Illuminate\Support\Facades\App;
 
 use Validator;
@@ -12,9 +12,8 @@ use DB;
 
 class WhitelabelPortal extends Model
 {
-    use SoftDeletes; // <-- Use This Instead Of SoftDeletingTrait
-
-    protected $pusher;
+    use SoftDeletes; // <-- used for soft deletion in laravel
+    protected $pusher; // pusher property to trigger pusher events
     /**
      * Indicates if the model should be timestamped.
      *
@@ -26,7 +25,7 @@ class WhitelabelPortal extends Model
      *
      * @var string
      */
-    protected $table = 'site_manager';
+    protected $table = 'fcm_site_manager';
 
     /**
      * The attributes that should be mutated to dates.
@@ -51,12 +50,20 @@ class WhitelabelPortal extends Model
         'lastUpdateByUser'=>'',
         'loginMessage'=>'',
         'signupMessage'=>'',
+        'question_email'=> '',
+        'question_phone'=> '',
+        'company_logo'=> '',
         'catPrefix'=>'',
         'catSuffix'=>'',
         'site_logo'=>'',
         'loginButtonColor' => '',
         'configuratorColor' =>'',
-        'customPartColor' => ''
+        'customPartColor' => '',
+        'company_link'=>'',
+        'login_background'=>'',
+        'screen_background'=>'',
+        'screen_background_img'=>'',
+        'bg_repeat'=>''
     ];
 
     protected $fillable = [
@@ -69,12 +76,20 @@ class WhitelabelPortal extends Model
         'lastUpdateByUser',
         'loginMessage',
         'signupMessage',
+        'question_email',
+        'question_phone',
+        'company_logo',
         'catPrefix',
         'catSuffix',
         'site_logo',
         'loginButtonColor',
         'configuratorColor',
-        'customPartColor'
+        'customPartColor',
+        'company_link',
+        'login_background',
+        'screen_background',
+        'screen_background_img',
+        'bg_repeat'
     ];
 
     /**
@@ -95,9 +110,15 @@ class WhitelabelPortal extends Model
                                 'loginMessage' => 'required',
                                 'signupMessage' => 'required',
                                 'site_logo' => 'required',
+                                'question_email'=> 'required|email',
+                                'question_phone'=> 'required',
+                                'company_logo'=> 'required',
                                 'loginButtonColor' => 'required' ,
                                 'configuratorColor' => 'required',
-                                'customPartColor' => 'required'
+                                'customPartColor' => 'required',
+                                'company_link'=>'required',
+                                'login_background'=>'required',
+                                'screen_background'=>'required',
                             );
     /**
      * [__construct description]
@@ -134,10 +155,15 @@ class WhitelabelPortal extends Model
      */
     public function getPortals () {
         return $this->whereNull('deleted_at')
-                ->join('customers','customers.pkCustomerID','=', $this->table.'.fkCustomerID')
+                ->join('fcm_customers','fcm_customers.pkCustomerID','=', $this->table.'.fkCustomerID')
                 ->get();
     }
 
+    /**
+     * [updateRecord description]
+     * @param  [type] $formData [description]
+     * @return [type]           [description]
+     */
     public function updateRecord($formData) {
         
         $check = $this->find($formData['id'])->save();
@@ -162,6 +188,23 @@ class WhitelabelPortal extends Model
         return $check;
     }
 
+    /**
+     * [getCustomerFormula description]
+     * @param  [type] $customer [description]
+     * @return [type]           [description]
+     */
+    public function getCustomerFormula($customer) {
+        return DB::table('fcm_customer_priceFormula')
+                ->where('fkCustomerID','=', $customer)
+                ->where('vendorId', '=', 180)
+                ->first();
+    }
+
+    /**
+     * [deletePortal description]
+     * @param  [type] $id [description]
+     * @return [type]     [description]
+     */
     public function deletePortal ($id){
         $check = $this->find($id)->delete();
         return 'done';

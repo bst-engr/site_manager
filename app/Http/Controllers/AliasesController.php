@@ -2,8 +2,11 @@
 
 use \App\Models\Alias;
 use \App\Models\AliasFormula;
+use \App\Models\Log;
+
 use Illuminate\Routing\Controller as BaseController;  // <<< See here - no real class, only an alias
-use View,Input;
+use View,Input, Auth;
+
 class AliasesController extends BaseController {
 	/**
 	 * [$portal description]
@@ -11,6 +14,7 @@ class AliasesController extends BaseController {
 	 */
 	private $alias;
 	private $aliasFormula;
+	private $logger;
 
 	/**
 	 * [__construct description]
@@ -19,6 +23,7 @@ class AliasesController extends BaseController {
 		$this->middleware('auth');
 		$this->alias = new Alias();
 		$this->aliasFormula=new AliasFormula();
+		$this->logger = new Log();
 	}
 
 	/**
@@ -35,13 +40,20 @@ class AliasesController extends BaseController {
 	public function editAliases() {
 
 	   $postData = Input::all();
-		 
-	   $this->alias->where('site', $postData['site'] )
-       ->where('fkCustomerID',$postData['fkCustomerID'])
-       ->where('aliasPart',$postData['lastPart'])
-       ->where ('aliasDescription',$postData['lastDescription'])
-       ->update(['aliasPart' => $postData['aliasPart'],'aliasDescription'=>$postData['aliasDescription']]);
+	   $oldData = $this->alias->where('fkCustomerID',$postData['fkCustomerID'])
+       ->where('partNumber',$postData['dbref'])
+       ->first();
 
+	   $this->alias->where('fkCustomerID',$postData['fkCustomerID'])
+       ->where('partNumber',$postData['dbref'])
+       ->update(['aliasPart' => $postData['aliasPart'],'aliasDescription'=>$postData['aliasDescription']]);
+       
+       //saving logs on alias
+       $this->logger->createLog(Auth::user()->name, 'Alias Settings', 'Update', $postData, $oldData );
+
+       $data=$this->alias->getAliasRow($postData['fkCustomerID'],$postData['dbref']);
+
+       return json_encode($data[0]);
 	}
 
 	public function getAliasFormula() {
@@ -56,9 +68,13 @@ class AliasesController extends BaseController {
 	public function saveAliasFormula() {
 
        $postData = Input::all();
-		
+       //fetching Old Data to store.
+		$oldData = $this->aliasFormula->getCustomerAliasFormula($postData['fkCustomerID']);
+
 	   $data=$this->aliasFormula->saveCustomerAliasFormula($postData);
        
+       //saving logs on alias
+       $this->logger->createLog(Auth::user()->name, 'Alias Formula Settings', 'Update', $postData, $oldData );
       return json_encode($data);
       
 	}

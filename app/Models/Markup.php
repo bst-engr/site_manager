@@ -22,7 +22,7 @@ class Markup extends Model
      *
      * @var string
      */
-    protected $table = 'site_manager_domains';
+    protected $table = 'fcm_site_manager_domains';
     /**
      * The attributes that are mass assignable.
      *
@@ -37,6 +37,7 @@ class Markup extends Model
         'domainLevel' => '',
         'attachCsvFlag' => '',
         'costColunmName' => '',
+        'preffered'=>'',
         'id'=> ''
     ];
 
@@ -49,6 +50,7 @@ class Markup extends Model
         'attachCsvFlag',
         'costColunmName',
         'fkCustomerID',
+        'preffered',
         'id'
     ];
 
@@ -65,12 +67,11 @@ class Markup extends Model
     
     public static $rules = array(
                                 'domain' => 'required',
-                                'catMarkup' => 'required',
-                                'mtpMarkup' => 'required',
-                                'fibermarkup' => 'required',
+                                'catMarkup' => 'required|numeric|between:0.1,0.99',
+                                'mtpMarkup' => 'required|numeric|between:0.1,0.99',
+                                'fibermarkup' => 'required|numeric|between:0.1,0.99',
                                 'domainLevel' => 'required',
-                                'attachCsvFlag' => 'required',
-                                'costColunmName' => 'required'
+                                'attachCsvFlag' => 'required',                                
                             );
     /**
      * [__construct description]
@@ -106,7 +107,12 @@ class Markup extends Model
      * @return [type] [description]
      */
     public function getMarkups ($customer) {
-        return $this->where('fkCustomerID', '=', $customer)->get();
+        $rows = $this->where('fkCustomerID', '=', $customer)->get();
+        //var_dump(count($rows));
+        if(count($rows) == 0) { //insert default markups
+            $rows = $this->defaultMarkups($customer);
+        }        
+        return $rows;
     }
 
     public function updateRecord ($formData) {
@@ -120,10 +126,63 @@ class Markup extends Model
                         'domainLevel' => $formData['domainLevel'],
                         'attachCsvFlag' => $formData['attachCsvFlag'],
                         'costColunmName' => $formData['costColunmName'],
+                        'preffered'=> $formData['costColunmName'],
                         'fkCustomerID' => $formData['fkCustomerID'],                                  
                     )
                 );
         return $check;
+    }
+
+    public function defaultMarkups ($customer) {
+        $data= array(
+                array(
+                        'domain' => "*.*",
+                        'catMarkup' => 0.15,
+                        'mtpMarkup' => 0.15,
+                        'fibermarkup' =>0.15,
+                        'domainLevel' => "admin",
+                        'attachCsvFlag' => "Yes",
+                        'costColunmName' => "",
+                        'preffered'      => "Yes",  
+                        'fkCustomerID' => $customer,                                  
+                ),
+                array(
+                                'domain' => "*.*",
+                                'catMarkup' => 0.15,
+                                'mtpMarkup' => 0.15,
+                                'fibermarkup' =>0.15,
+                                'domainLevel' => "re-seller",
+                                'attachCsvFlag' => "No",
+                                'costColunmName' => "",
+                                'preffered'      => "Yes",  
+                                'fkCustomerID' => $customer,                                  
+                ),
+                array(
+                                'domain' => "*.*",
+                                'catMarkup' => 0.15,
+                                'mtpMarkup' => 0.15,
+                                'fibermarkup' =>0.15,
+                                'domainLevel' => "end-user",
+                                'attachCsvFlag' => "No",
+                                'costColunmName' => "",
+                                'preffered'      => "Yes",  
+                                'fkCustomerID' => $customer,                                  
+                ),
+                array(
+                                'domain' => "*.*",
+                                'catMarkup' => 0.15,
+                                'mtpMarkup' => 0.15,
+                                'fibermarkup' =>0.15,
+                                'domainLevel' => "sales-rep",
+                                'attachCsvFlag' => "Yes",
+                                'costColunmName' => "",
+                                'preffered'      => "Yes",  
+                                'fkCustomerID' => $customer,                                  
+                )
+            );
+        //mass insertion of default templates.
+        $this->insert($data);
+        return $this->where('fkCustomerID', '=', $customer)->get();
     }
 
 }

@@ -13,7 +13,7 @@ class Customer extends Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'customers';
+	protected $table = 'fcm_customers';
 
 	/**
 	 * The attributes that are mass assignable.

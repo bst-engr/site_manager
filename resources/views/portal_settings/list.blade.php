@@ -60,8 +60,9 @@ Whitelabel Portal Settings
                     <td>@{{ customer.site_url }}</td>
                     <td>
                       <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-md" ng-click="deletePortal(customer.id)"><i class="fa fa-trash-o"></i></button>
-                        <button type="button" class="btn btn-default btn-md" ng-click="editCustomer(customer.fkCustomerID)"><i class="fa fa-edit"></i></button><!-- 
+                        <button type="button" class="btn btn-success" ng-click="editCustomer(customer.fkCustomerID)"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-danger" ng-click="deletePortal(customer.id)"><i class="fa fa-trash-o"></i></button>
+                        <!-- 
                         <button type="button" class="btn btn-default btn-sm" ng-click="viewRecord(contact.id)"><i class="fa fa-file"></i></button> -->
                       </div>
                     </td>
@@ -85,6 +86,7 @@ Whitelabel Portal Settings
 <script src="//cdn.jsdelivr.net/angular.pusher/latest/pusher-angular.min.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{asset('plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+<script src="{{asset('plugins/jquery-loader-plugins.js')}}"></script>
 
 @stop
 

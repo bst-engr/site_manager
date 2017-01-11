@@ -22,7 +22,7 @@ class Quote extends Model
      *
      * @var string
      */
-    protected $table = 'site_manager_quotes';
+    protected $table = 'fcm_site_manager_quotes';
     /**
      * The attributes that are mass assignable.
      *
@@ -38,7 +38,16 @@ class Quote extends Model
         'footerLeft'=> '',
         'footerMiddle'=> '',
         'fkCustomerID'=> '',
+        'adminCcEmail'=>'',
         'customPartColor'=> '',
+        'smtpHost'=> '',
+        'smtpPort'=> '',
+        'smtpUser'=> '',
+        'smtpPassword'=> '',
+        'mailFrom'=> '',
+        'fromName'=> '',
+        'noReplyEmail'=> '',
+        'costColumnAlias'=>'',
         'id'=> null
     ];
 
@@ -52,6 +61,15 @@ class Quote extends Model
         'footerMiddle',
         'fkCustomerID',
         'customPartColor',
+        'adminCcEmail',
+        'smtpHost',
+        'smtpPort',
+        'smtpUser',
+        'smtpPassword',
+        'mailFrom',
+        'fromName',
+        'noReplyEmail',
+        'costColumnAlias',
         'id'
     ];
 
@@ -75,7 +93,16 @@ class Quote extends Model
                                 'footerLeft'=> 'required',
                                 'footerMiddle'=> 'required',
                                 'fkCustomerID'=> 'required',
+                                'adminCcEmail'=>'required',
                                 'customPartColor'=> 'required',
+                                'smtpHost'=> 'required',
+                                'smtpPort'=> 'required',
+                                'smtpUser'=> 'required|alpha_num',
+                                'smtpPassword'=> 'required',
+                                'mailFrom'=> 'required|email',
+                                'fromName'=> 'required',
+                                'costColumnAlias'=> 'required',
+                                'noReplyEmail' => 'required|email'
                             );
     /**
      * [__construct description]
@@ -126,7 +153,10 @@ class Quote extends Model
                         'footerLeft'=> $formData['footerLeft'],
                         'footerMiddle'=> $formData['footerMiddle'],
                         'fkCustomerID'=> $formData['fkCustomerID'],
-                        'customPartColor'=> $formData['customPartColor']                                  
+                        'adminCcEmail'=>$formData['adminCcEmail'],
+                        'customPartColor'=> $formData['customPartColor'],
+                        'noReplyEmail'=> $formData['noReplyEmail'],
+                        'costColumnAlias'=> $formData['costColumnAlias']
                     )
                 );
         return $check;

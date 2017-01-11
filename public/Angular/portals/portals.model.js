@@ -15,9 +15,17 @@ angular.module('portalModel',['httpServiceModel']).factory('Portal', ['$http', '
                 'catPrefix': '',
                 'catSuffix': '',  
                 'site_logo': '',
+                'question_email': '',
+                'question_phone': '',
+                'company_logo': '',
                 'loginButtonColor' : '',
                 'configuratorColor': '',
-                'customPartColor' : ''
+                'customPartColor' : '',
+                'company_link': '',
+                'login_background':'',
+                'screen_background':'',
+                'screen_background_img': '',
+                'bg_repeat':''
             },
             errors: []
 
@@ -61,6 +69,10 @@ angular.module('portalModel',['httpServiceModel']).factory('Portal', ['$http', '
     Portal.deleteRecord = function (id) {
         return $http.post(httpService.getUrl('portal/delete/'+id),{});
     };
+
+    Portal.getCustomerPriceFormula = function (id) {
+        return $http.post(httpService.getUrl('portal/price_formula/'+id),{});  
+    }
 
     Portal.removeRow = function (object, find) {
         for(var i=0; i< object.length; i++) {

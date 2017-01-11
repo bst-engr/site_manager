@@ -37,6 +37,9 @@
     app.run(function(editableOptions) {
       editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
     });
+
+    // Directives
+    app.directive('checkImage', checkImage);
     
     /**
      * Initializes controller for patch cables module.
@@ -53,6 +56,7 @@
                 basicSettingCheck: false,
                 fkCustomerID: '',
                 customers: [],
+                customerPriceFormula: '',
                 propertiesToSave: ['baseForm', 'baseErrors', 'state','table_search', 'markupList']
             };
         //
@@ -93,12 +97,17 @@
         scope.templates = [
                     {value: 'admin', text: 'admin'},
                     {value: 're-seller', text: 're-seller'},
-                    {value: 'sales-rep', text: 'sales-rep'}
+                    {value: 'sales-rep', text: 'sales-rep'},
+                    {value: 'end-user', text: 'end-user'}
                 ];
         scope.attachCv= [
                     {value: 'yes', text: 'Yes'},
                     {value: 'no', text: 'No'}
                 ];
+        scope.preffered = [
+                    {value: 'yes', text: 'Yes'},
+                    {value: 'no', text: 'No'}
+        ];
 
         //App Initliazer
         getCompanies();
@@ -133,8 +142,10 @@
               scope.state.basicSettingCheck = false;
               Portal.formFields.fkCustomerID = scope.state.fkCustomerID;
               Portal.errors = scope.baseErrors = {};
+              $('section.content').showLoader();
               Portal.saveBasicSettings().then(
                   function (res) { //success
+                      $('section.content').hideLoader();
                       console.log(res);
                       if(typeof res.data === 'object') {
                           scope.baseErrors = res.data;
@@ -149,6 +160,7 @@
                       }
                   },
                   function (err) { // error
+                      $('section.content').hideLoader();
                       console.log(err);
                   }
               );
@@ -187,8 +199,10 @@
 
             Quote.formFields.fkCustomerID = scope.state.fkCustomerID;
             Quote.errors = scope.quoteErrors = {};
+            $('section.content').showLoader();
             Quote.saveQuote().then(
                 function (res) { //success
+                    $('section.content').hideLoader();
                     console.log(res);
                     if(typeof res.data === 'object') {
                         scope.quoteErrors = res.data;
@@ -202,6 +216,7 @@
                     }
                 },
                 function (err) { // error
+                    $('section.content').hideLoader();
                     console.log(err);
                 }
             );
@@ -231,6 +246,7 @@
                    // getAliasList(ui.item.value); //request to fetch alias list for selected customer
                     getMarkupList(ui.item.value, scope.baseForm.site_url); //fetch markup list for selected customer
                     getCustomerQuote (ui.item.value); //get quote details
+                    getCustomerPriceFormula(ui.item.value);
                 }
             });
         };
@@ -243,12 +259,12 @@
          */
         scope.saveCurrentAlias = function (data, row,rowform) {
             //console.log(data);
-            Alias.editAlias(row.aliasPart,row.aliasDescription,scope.state.fkCustomerID,Portal.formFields.site_name,data.aliasPart,data.aliasDescription,rowform).then( 
+            Alias.editAlias(row.aliasPart,row.aliasDescription,row.partNumber,scope.state.fkCustomerID,Portal.formFields.site_name,data.aliasPart,data.aliasDescription,rowform).then( 
                
                 function (response) { //success call back
                   
                    console.log(data);
-                  scope.aliasList= Alias.updateAliasList(scope.aliasList,data);
+                   scope.aliasList= Alias.updateAliasList(scope.aliasList,response.data);
                   rowform.$hide();
 
                 }
@@ -292,21 +308,120 @@
         }
 
         /**
+         * [uploadPic description]
+         * @param  {[type]} file [description]
+         * @return {[type]}      [description]
+         */
+        scope.uploadCompanyPic = function(file) {
+            if(file) {
+                file.upload = Upload.upload({
+                  url: httpService.getUrl('portal/upload_logo'),
+                  data: {file: file, company_logo: 'yes'},
+                });
+
+                file.upload.then(function (response) {
+                  $timeout(function () {
+                    scope.baseForm.company_logo = response.data;
+                    file.result = response.data;
+                  });
+                }, function (response) {
+                  if (response.status > 0)
+                    scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                  // Math.min is to fix IE which reports 200% sometimes
+                  file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+            }
+        }
+
+        /**
+         * [uploadLoginPic description]
+         * @param  {[type]} file [description]
+         * @return {[type]}      [description]
+         */
+        scope.uploadLoginPic = function (file) {
+          if(file) {
+                file.upload = Upload.upload({
+                  url: httpService.getUrl('portal/upload_logo'),
+                  data: {file: file, background: 'yes'},
+                });
+
+                file.upload.then(function (response) {
+                  $timeout(function () {
+                    scope.baseForm.login_background = response.data;
+                    file.result = response.data;
+                  });
+                }, function (response) {
+                  if (response.status > 0)
+                    scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                  // Math.min is to fix IE which reports 200% sometimes
+                  file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+            }
+        }
+
+        /**
+         * [uploadBackgroundPic description]
+         * @param  {[type]} file [description]
+         * @return {[type]}      [description]
+         */
+        scope.uploadBackgroundPic = function (file) {
+          if(file) {
+                file.upload = Upload.upload({
+                  url: httpService.getUrl('portal/upload_logo'),
+                  data: {file: file, background: 'yes'},
+                });
+
+                file.upload.then(function (response) {
+                  $timeout(function () {
+                    scope.baseForm.screen_background_img = response.data;
+                    file.result = response.data;
+                  });
+                }, function (response) {
+                  if (response.status > 0)
+                    scope.errorMsg = response.status + ': ' + response.data;
+                }, function (evt) {
+                  // Math.min is to fix IE which reports 200% sometimes
+                  file.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                });
+            }
+        }
+
+        /**
          * [addMarkupRow description]
          */
         scope.addMarkupRow = function () {
+            $('section.content').showLoader();
             if(scope.state.fkCustomerID ) { // if customer has already been selected
-              if(scope.markupList[scope.markupList.length-1].domain != '' ){ //if new row has already been added
+              if(scope.markupList.length == 0 ||  scope.markupList[scope.markupList.length-1].domain != '' ){ //if new row has already been added
                 scope.state.markupConfError = false;
+                Markup.newRow.shown = true;
                 scope.markupList.push(Markup.newRow);
+                $('section.content').hideLoader();
               } else{ //if already clicked the add row button
+                $('section').hideLoader();
                 scope.state.markupConfError = "Please save last entry before adding another one."
               }
             }  else{ // if customer is not selected then just show a message
+              $('section').hideLoader();
               scope.state.markupConfError = "Select a customer to proceed";
             }         
         };
 
+        /**
+         * [cancelMarkup description]
+         * @param  {[type]} markupform [description]
+         * @param  {[type]} obj        [description]
+         * @return {[type]}            [description]
+         */
+        scope.cancelMarkup = function (markupform, obj) {
+          if(obj.id === null) { // if new row is being delete which never been saved in DB
+            scope.state.markupConfError = false;
+            scope.markupList= Markup.deleteMarkupList(scope.markupList, obj);
+          } 
+          markupform.$cancel();
+        }
         /**
          * [removeMarkup description]
          * @param  {[type]} index [description]
@@ -317,14 +432,18 @@
           if(obj.id === null) { // if new row is being delete which never been saved in DB
             scope.state.markupConfError = false;
             scope.markupList= Markup.deleteMarkupList(scope.markupList, obj);
+            $('section.content').hideLoader();
             return;            
           } else if(confirm("Are you sure to delete this entry?")) { // if entry exists in DB then confirm before deletion
+            $('section.content').showLoader();
             Markup.removeMarkup(obj).then(
               function ( res ){ //success callback
                 scope.state.pusherNotification = "Markup Entry has been Removed for "+ obj.domain;
                 scope.markupList= Markup.deleteMarkupList(scope.markupList, obj);
+                $('section.content').hideLoader();
               },
               function ( err ) { //error call back
+                $('section.content').hideLoader();
                 console.log(err);
               }
             );
@@ -341,9 +460,10 @@
             Markup.formFields.fkCustomerID = scope.state.fkCustomerID; 
             Markup.formFields.id= currentRow.id || null; //assigning row id to prepared form
             Markup.resetErrors(markupform);//resetting errors array;
-
+            $('section.content').showLoader();
             Markup.saveMarkupList().then( //save function called
                 function (res) { //success
+                    $('section.content').hideLoader();
                     if(typeof res.data === 'object') { //if erros are returned then display it
                       Markup.setErrors(markupform, res.data);                      
                     } else {
@@ -360,6 +480,7 @@
                     }
                 },
                 function (err) { // error
+                  $('section.content').hideLoader();
                     console.log(err);
                 }
             );
@@ -379,6 +500,7 @@
             scope.state.readOnly = true;
             getMarkupList(id, scope.baseForm.site_url); //fetch markup list for selected customer
             scope.table_search = scope.baseForm.site_name; //setting model name
+            getCustomerPriceFormula(id);
           }
         };
 
@@ -502,6 +624,40 @@
                 }
             );
         }
+
+        /**
+         * [getCustomerPriceFormula description]
+         * @param  {[type]} customer [description]
+         * @return {[type]}          [description]
+         */
+        function getCustomerPriceFormula(customer) {
+          Portal.getCustomerPriceFormula(customer).then(
+                function (res) { //success
+                    console.log(res.data !== 'null');
+                    if(res.data !== 'null') {
+                        scope.state.customerPriceFormula = res.data.customerPriceFormula;
+                    }
+                },
+                function (err) { //error
+                    console.log(err);
+                }
+            );
+        }
         
     }   
 })();
+
+function checkImage($http) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            attrs.$observe('ngSrc', function(ngSrc) {
+                $http.get(ngSrc).success(function(){
+                }).error(function(){
+                    //alert('image not exist');
+                    element.attr('alt', 'Preview Not Available'); // set default image
+                });
+            });
+        }
+    };
+}

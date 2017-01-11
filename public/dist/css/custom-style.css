@@ -6,8 +6,14 @@
 	display: inline-block;
 }
 .alias_list {
-	height: 400px;
-	overflow-y: scroll;
+}
+.colors-panel label.col-sm-12.control-label {
+    text-align: left;
+    margin-bottom: 5px;
+}
+.colors-panel label.has-error {
+    text-align: left;
+    color: #dd4b39;
 }
 ul.ui-autocomplete   {
         z-index: 10189;
@@ -52,3 +58,22 @@ ul.ui-autocomplete   {
 .partnumberContainer label.text-left {
     text-align: left;
 }
+.table-fixed thead {
+  width: 100%;
+}
+.table-fixed tbody {
+  height: 400px;
+  overflow-y: auto;
+  width: 100%;
+}
+.table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+  display: block;
+}
+.table-fixed tr {
+    clear: both;
+}
+.table-fixed tbody td, .table-fixed thead > tr> th {
+  float: left;
+  border-bottom-width: 0;
+}
+.title-row .box-header { padding: 20px 10px; }

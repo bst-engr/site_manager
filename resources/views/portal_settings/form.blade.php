@@ -86,10 +86,31 @@ Whitelabel Portal Settings
                     <i class="fa fa-bell-o"></i>@{{baseErrors.signupMessage[0]}}</label>
                   </div>
                 </div>
-                <div class="form-group" ng-class="{'has-error' : baseErrors.site_logo[0]}">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Site Logo</label>
+                <!-- -->
+                  <div class="form-group" ng-class="{'has-error' : baseErrors.question_email[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Question Email</label>
 
                   <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" ng-model="baseForm.question_email" placeholder="Email">
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.question_email[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.question_email[0]}}</label>
+                  </div>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error' : baseErrors.question_phone[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Question Phone</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" ng-model="baseForm.question_phone" placeholder="Phone Number">
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.question_phone[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.question_phone[0]}}</label>
+                  </div>
+                </div>
+                <!-- -->
+                <div class="form-group" ng-class="{'has-error' : baseErrors.site_logo[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Configurator Logo</label>
+
+                  <div class="col-sm-6">
                     <!-- <input type="text" class="form-control" id="" ng-model="baseForm.site_logo" placeholder="Site Logo"> -->
                     <input type="file" ngf-select ng-model="picFile" name="file"    
                            accept="image/*" ngf-max-size="2MB" required
@@ -107,42 +128,181 @@ Whitelabel Portal Settings
                     <label class="control-label" for="inputWarning" ng-show="baseErrors.site_logo[0]">
                     <i class="fa fa-bell-o"></i>@{{baseErrors.site_logo[0]}}</label>
                   </div>
+                  <div class="col-sm-4">
+                    <img check-image ng-src="http://@{{baseForm.site_url}}/images/logo/config_@{{baseForm.site_logo}}" height="50" alt="Preview Not Available">
+                  </div>
                 </div>
-                <div class="form-group" >
-                  <label for="inputPassword3" class="col-sm-2 control-label">Login/Signup Button Color</label>
-                  <div class="col-sm-2">
+                <div class="form-group" ng-class="{'has-error' : baseErrors.company_logo[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Company Logo</label>
+
+                  <div class="col-sm-6">
+                    <!-- <input type="text" class="form-control" id="" ng-model="baseForm.site_logo" placeholder="Site Logo"> -->
+                    <input type="file" ngf-select ng-model="companyFile" name="companyfile"    
+                           accept="image/*" ngf-max-size="2MB" required
+                           ngf-model-invalid="errorFile"
+                           ng-change="uploadCompanyPic(companyFile)">
+                      <i ng-show="myForm.file.$error.maxSize">File too large 
+                        @{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                      <div class="progress progress-striped active" ng-show="companyFile.progress >= 0 && !baseErrors.company_logo[0]">
+                        <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="@{{companyFile.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:@{{companyFile.progress}}%" 
+                          ng-bind="companyFile.progress + '%'">
+                          <span class="sr-only">@{{companyFile.progress}}% Completed</span>
+                        </div>
+                      </div>
+                    <span ng-show="companyFile.result">Upload Successful</span>
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.company_logo[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.company_logo[0]}}</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <img check-image ng-src="http://@{{baseForm.site_url}}/images/logo/@{{baseForm.company_logo}}" height="50" alt="">
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error' : baseErrors.company_link[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Company Website</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" ng-model="baseForm.company_link" placeholder="Company Website">
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.company_link[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.company_link[0]}}</label>
+                  </div>
+                </div>
+
+                <div class="row title-row">
+                  <div class="col-xs-12">
+                    <div class="box-header">
+                        <h3 class="box-title"><a href="#">Login & Configurator Styling</a></h3>
+                        <div class="">
+                          <div class="input-group input-group-sm" style="width: 250px;">
+                            <div class="input-group-btn">
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <!-- /.box -->
+                  </div>
+                </div>
+
+
+                <div class="form-group" ng-class="{'has-error' : baseErrors.login_background[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Login Background</label>
+
+                  <div class="col-sm-6">
+                    <!-- <input type="text" class="form-control" id="" ng-model="baseForm.site_logo" placeholder="Site Logo"> -->
+                    <input type="file" ngf-select ng-model="login_background" name="companyfile"    
+                           accept="image/*" ngf-max-size="2MB" required
+                           ngf-model-invalid="errorFile"
+                           ng-change="uploadLoginPic(login_background)">
+                      <i ng-show="myForm.file.$error.maxSize">File too large 
+                        @{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                      <div class="progress progress-striped active" ng-show="login_background.progress >= 0 && !baseErrors.login_background[0]">
+                        <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="@{{login_background.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:@{{login_background.progress}}%" 
+                          ng-bind="login_background.progress + '%'">
+                          <span class="sr-only">@{{login_background.progress}}% Completed</span>
+                        </div>
+                      </div>
+                    <span ng-show="login_background.result">Upload Successful</span>
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.login_background[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.login_background[0]}}</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <img check-image ng-src="http://@{{baseForm.site_url}}/images/logo/@{{baseForm.login_background}}" height="50" alt="">
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error' : baseErrors.screen_background_img[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Screen Background</label>
+
+                  <div class="col-sm-6">
+                    <!-- <input type="text" class="form-control" id="" ng-model="baseForm.site_logo" placeholder="Site Logo"> -->
+                    <input type="file" ngf-select ng-model="screen_background_img" name="screen_background_img"    
+                           accept="image/*" ngf-max-size="2MB" required
+                           ngf-model-invalid="errorFile"
+                           ng-change="uploadBackgroundPic(screen_background_img)">
+                      <i ng-show="myForm.file.$error.maxSize">File too large 
+                        @{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                      <div class="progress progress-striped active" ng-show="screen_background_img.progress >= 0 && !baseErrors.screen_background_img[0]">
+                        <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="@{{screen_background_img.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:@{{screen_background_img.progress}}%" 
+                          ng-bind="screen_background_img.progress + '%'">
+                          <span class="sr-only">@{{screen_background_img.progress}}% Completed</span>
+                        </div>
+                      </div>
+                    <span ng-show="screen_background_img.result">Upload Successful</span>
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.screen_background_img[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.screen_background_img[0]}}</label>
+                  </div>
+                  <div class="col-sm-4">
+                    <img check-image ng-src="http://@{{baseForm.site_url}}/images/logo/@{{baseForm.screen_background_img}}" height="50" alt="">
+                  </div>
+                </div>
+
+                <!-- screen background if needed -->
+                <div class="form-group" ng-class="{'has-error' : baseErrors.bg_repeat[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Background Repeat</label>
+
+                  <div class="col-sm-10">
+                    <select class="form-control" ng-model="baseForm.bg_repeat" place>
+                      <option value="no-repeat">No Repeat</option>
+                      <option value="repeat-x">Repeat X</option>
+                      <option value="repeat-y">Repeat Y</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" id="" ng-model="baseForm.bg_repeat" placeholder="Phone Number"> -->
+                    <label class="control-label" for="inputWarning" ng-show="baseErrors.bg_repeat[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.bg_repeat[0]}}</label>
+                  </div>
+                </div>
+                <!-- End Background -->
+                <div class="form-group colors-panel" >
+                  <div class="col-sm-3">
+                    <label for="inputPassword3" class="col-sm-12 control-label">Screen Background</label>
+                    <div class="col-sm-12">
+                    <color-picker
+                        ng-model="baseForm.screen_background"
+                        options="options"
+                    ></color-picker>
+                    <label class="control-label" for="inputWarning" ng-class="{'has-error': baseErrors.screen_background[0]}" ng-show="baseErrors.screen_background[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.screen_background[0]}}</label>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <label for="inputPassword3" class="col-sm-12  pull-left control-label">Login/Signup Button Color</label>
+                    <div class="col-sm-12">
                     <color-picker
                         ng-model="baseForm.loginButtonColor"
                         options="options"
                     ></color-picker>
-                    <label class="control-label" for="inputWarning" ng-show="baseErrors.loginButtonColor[0]">
+                    <label class="control-label" for="inputWarning" ng-class="{'has-error': baseErrors.loginButtonColor[0]}" ng-show="baseErrors.loginButtonColor[0]">
                     <i class="fa fa-bell-o"></i>@{{baseErrors.loginButtonColor[0]}}</label>
+                    </div>
                   </div>
-                  <label for="inputPassword3" class="col-sm-2 control-label">Configurator Link Color</label>
-                  <div class="col-sm-2">
+                  <div class="col-sm-3">
+                    <label for="inputPassword3" class="col-sm-12 control-label pull-left">Configurator Link Color</label>
+                    <div class="col-sm-12">
                     <color-picker
                         ng-model="baseForm.configuratorColor"
                         options="options"
                     ></color-picker>
-                    <label class="control-label" for="inputWarning" ng-show="baseErrors.configuratorColor[0]">
-                    <i class="fa fa-bell-o"></i>@{{baseErrors.configuratorColor[0]}}</label>
+                    <label class="control-label" for="inputWarning" ng-class="{'has-error': baseErrors.configuratorColor[0]}" ng-show="baseErrors.configuratorColor[0]">
+                    <i class="fa fa-bell-o"></i>@{{baseErrors.configuratorColor[0]}}</label>  
+                    </div>
                   </div>
-                  <label for="inputPassword3" class="col-sm-2 control-label">Configurator Active Link Color</label>
-                  <div class="col-sm-2">
+
+                  <div class="col-sm-3">
+                    <label for="inputPassword3" class="col-sm-12 control-label pull-left">Configurator Active Link Color</label>
+                    <div class="col-sm-12">
                     <color-picker
                         ng-model="baseForm.customPartColor"
                         options="options"
                     ></color-picker>
-                    <label class="control-label" for="inputWarning" ng-show="baseErrors.customPartColor[0]">
+                    <label class="control-label" for="inputWarning" ng-class="{'has-error': baseErrors.customPartColor[0]}" ng-show="baseErrors.customPartColor[0]">
                     <i class="fa fa-bell-o"></i>@{{baseErrors.customPartColor[0]}}</label>
+                    </div>
                   </div>
                 </div>
 
-                <div class="row">
+                <div class="row title-row">
                   <div class="col-xs-12">
                     <div class="">
-                      <div class="">
-                        <h3 class="box-title">Markup List</h3>
+                      <div class="box-header">
+                        <h3 class="box-title"> <a href="#">Markup List</a></h3>
 
                         <div class="">
                           <div class="input-group input-group-sm" style="width: 250px;">
@@ -163,7 +323,8 @@ Whitelabel Portal Settings
                               <th>Cat Markup</th>
                               <th>Qutote Template</th>
                               <th>Attach CSV</th>
-                              <th>Cost Alias</th>
+                              <!-- <th>Cost Alias</th>
+                              <th>Preffered?</th> -->
                               <th>Action</th>
                             </tr>
                           </thead>
@@ -200,18 +361,23 @@ Whitelabel Portal Settings
                                  @{{markup.attachCsvFlag || ''}}
                                 </span>
                               </td>
-                              <td>
+                              <!--<td>
                                 <span editable-text="markup.costColunmName" e-name="costColunmName" e-form="markupform" onbeforesave="">
                                  @{{markup.costColunmName || ''}}
                                 </span>
                               </td>
+                               <td>
+                                <span editable-select="markup.preffered" e-name="preffered" e-form="markupform" onbeforesave="" e-ng-options="v.value as v.text for v in preffered">
+                                 @{{markup.preffered || ''}}
+                                </span>
+                              </td> -->
                               <td>
                                 <!-- form -->
-                                <form editable-form name="markupform" onbeforesave="" ng-show="markupform.$visible" class="form-buttons form-inline" shown="inserted == markup">
+                                <form editable-form name="markupform" onbeforesave="" ng-show="markupform.$visible" class="form-buttons form-inline" shown="markup.shown == true">
                                   <button type="button" ng-click="saveMarkup(markupform, markup)" ng-disabled="markupform.$waiting" class="btn  btn-primary">
                                     save
                                   </button>
-                                  <button type="button" ng-disabled="markupform.$waiting" ng-click="markupform.$cancel()" class="btn btn-default">
+                                  <button type="button" ng-disabled="markupform.$waiting" ng-click="cancelMarkup(markupform, markup)" class="btn btn-default">
                                     cancel
                                   </button>
                                 </form>
@@ -224,7 +390,7 @@ Whitelabel Portal Settings
                           </tbody>
                           <tfoot>
                             <tr>
-                              <td colspan="8">
+                              <td colspan="9">
                                 <div class="col-sm-1">
                                 <button type="button" class="btn btn-default" ng-click="addMarkupRow()">Add row</button>
                               </div>
@@ -246,7 +412,7 @@ Whitelabel Portal Settings
                 <div class="form-group" ng-class="{'has-error': baseErrors.catPrefix || baseErrors.catSuffix}">
                   <label for="inputPassword3" class="col-sm-2 control-label">Price Formula</label>
                   <div class="col-sm-5">
-                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                    <textarea class="form-control" rows="3" placeholder="Enter ...">@{{state.customerPriceFormula}}</textarea>
                   </div>
                   <label class="col-sm-2 control-label">Cat Alias</label> 
                   <div class="col-sm-1">
@@ -303,39 +469,46 @@ Whitelabel Portal Settings
                   </div>
                 </div>
                 <div class="table-responsive alias_list">
-                  <table class="table table-hover">
+                  <table class="table table-hover table-fixed">
                           <thead>
                             <tr>
-                              <th>DB Ref.</th>
-                              <th>Alias Part</th>
-                              <th>Component</th>
-                              <th>Alias Description</th>
-                              <th></th>
+                              <th class="col-xs-2">DB Ref.</th>
+                              <th class="col-xs-2">Component</th>
+                              <th class="col-xs-2">FCM PartNumber</th>
+                              <th class="col-xs-2">Alias Part</th>                              
+                              <th class="col-xs-2">Alias Description</th>
+                              <th class="col-xs-2"></th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr ng-repeat= "aliasRow in aliasList | filter:search_prod">
-                              <td>
+                              <td class="col-xs-2">
                                 <span editable-text="aliasRow.dbRef"  e-name="dbRef" e-form="rowform" onbeforesave="" e-readonly>
                                     @{{ aliasRow.dbRef || 'empty' }}
                                 </span>
                                 </td>
-                              <td>
+                              <td class="col-xs-2">
+                                <span editable-text="aliasRow.fieldTable" e-name="fieldTable" e-form="rowform" onbeforesave="" e-readonly>
+                                    @{{ aliasRow.fieldTable.replace("fcm_","") || 'empty' }}
+                                </span>
+                                </td>
+                              <td class="col-xs-2">
+                                <span editable-text="aliasRow.aliasPartNumber" e-name="aliasPartNumber" e-form="rowform" onbeforesave="" e-readonly>
+                                    @{{ aliasRow.aliasPartNumber || 'empty' }}
+                                </span>
+                                </td>
+                              <td class="col-xs-2">
                                 <span editable-text="aliasRow.aliasPart"  e-name="aliasPart" e-form="rowform" onbeforesave="" e-required>
                                     @{{ aliasRow.aliasPart || 'empty' }}
                                 </span>
                               </td>
-                              <td>
-                                <span editable-text="aliasRow.fieldTable" e-name="fieldTable" e-form="rowform" onbeforesave="" e-readonly>
-                                    @{{ aliasRow.fieldTable || 'empty' }}
-                                </span>
-                                </td>
-                              <td>
+                              
+                              <td class="col-xs-2">
                                 <span editable-text="aliasRow.aliasDescription" e-name="aliasDescription" e-form="rowform" onbeforesave="" e-required>
                                     @{{ aliasRow.aliasDescription || 'empty' }}
                                 </span>
                               </td>
-                              <td style="white-space: nowrap">
+                              <td class="col-xs-2 text-right" style="white-space: nowrap">
                                 <!-- form -->
                                 <form editable-form name="rowform" onbeforesave="" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == aliasRow">
                                   <button type="button" ng-click="saveCurrentAlias(rowform.$data, aliasRow,rowform)" ng-disabled="rowform.$waiting" class="btn  btn-primary">
@@ -446,8 +619,36 @@ Whitelabel Portal Settings
                     <i class="fa fa-bell-o"></i>@{{quoteErrors.headerEmail[0]}}</label>
                   </div>
                 </div>
+
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.adminCcEmail[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Admin CC Email</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="quoteForm.adminCcEmail" placeholder="Admin CC Email (coma separated)">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.adminCcEmail[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.adminCcEmail[0]}}</label>
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.noReplyEmail[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">No Reply Email</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="quoteForm.noReplyEmail" placeholder="No Reply Email">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.noReplyEmail[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.noReplyEmail[0]}}</label>
+                  </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.costColumnAlias[0]}">
+                  <label for="inputPassword3" class="col-sm-2 control-label">Cost Column Alias</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" ng-model="quoteForm.costColumnAlias" placeholder="Cost Column Alias">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.costColumnAlias[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.costColumnAlias[0]}}</label>
+                  </div>
+                </div>
                 <div class="form-group" ng-class="{'has-error' : quoteErrors.phone[0]}">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Phone</label>
+                  <label for="inputPassword3" class="col-sm-2 control-label">Quotes Phone</label>
 
                   <div class="col-sm-10">
                     <input type="text" class="form-control" id="" ng-model="quoteForm.phone" placeholder="Phone">
@@ -518,9 +719,85 @@ Whitelabel Portal Settings
                     <i class="fa fa-bell-o"></i>@{{quoteErrors.customPartColor[0]}}</label>
                   </div>
                 </div>
+                
             </div>
             
             <!-- /.box-body -->
+            <div class="box-header">
+              <h3 class="box-title"><a href="#">SMTP Settings</a>
+              </h3>
+            </div>
+             <!-- /.box-header -->
+            <div class="box-body">
+              <!-- SMTP configurations -->
+                <!-- Mail From -->
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.fromName[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Mail From Name</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="quoteForm.fromName" placeholder="Mail From Name">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.fromName[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.fromName[0]}}</label>
+                  </div>
+                </div>
+                <!-- Mail From Email-->
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.mailFrom[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">Mail From Email</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="quoteForm.mailFrom" placeholder="Mail From Email">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.mailFrom[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.mailFrom[0]}}</label>
+                  </div>
+                </div>
+                <!-- SMTP Host-->
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.smtpHost[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">SMTP Host</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="quoteForm.smtpHost" placeholder="SMTP Host">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.smtpHost[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.smtpHost[0]}}</label>
+                  </div>
+                </div>
+
+                <!-- SMTP User-->
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.smtpUser[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">SMTP User</label>
+
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="quoteForm.smtpUser" placeholder="SMTP User Name">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.smtpUser[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.smtpUser[0]}}</label>
+                  </div>
+                </div>
+                <!-- SMTP Password-->
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.smtpPassword[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">SMTP Password</label>
+
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" ng-model="quoteForm.smtpPassword" placeholder="SMTP Password">
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.smtpPassword[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.smtpPassword[0]}}</label>
+                  </div>
+                </div>
+                <!-- SMTP POrt-->
+                <div class="form-group" ng-class="{'has-error' : quoteErrors.smtpPort[0]}">
+                  <label for="inputEmail3" class="col-sm-2 control-label">SMTP Port</label>
+
+                  <div class="col-sm-10">
+                    <select class="form-control" ng-model="quoteForm.smtpPort" placeholder="SMTP Port">
+                      <option value="25">25</option>
+                      <option value="465">465</option>
+                      <option value="587">587</option>
+                    </select>
+                    <!-- <input type="text" class="form-control" ng-model="quoteForm.smtpPort" placeholder="SMTP Port"> -->
+                    <label class="control-label" for="inputWarning" ng-show="quoteErrors.smtpPort[0]">
+                    <i class="fa fa-bell-o"></i>@{{quoteErrors.smtpPort[0]}}</label>
+                  </div>
+                </div>
+            </div>
+             <!-- /.box-body -->
             <div class="box-footer" ng-init="reloadCustomer({{isset($fkCustomerID) ? $fkCustomerID : false}})">
                 <button type="button" class="btn btn-primary" ng-click="getPreviousState()">Back</button>
                 <button type="button" class="btn btn-primary" ng-click="saveQuoteSettings()">Save</button>
@@ -550,6 +827,7 @@ Whitelabel Portal Settings
 <script src="{{asset('plugins/textAngular/textAngular-rangy.min.js')}}"></script>
 <script src="{{asset('plugins/textAngular/textAngular-sanitize.min.js')}}"></script>
 <script src="{{asset('plugins/textAngular/textAngular.min.js')}}"></script>
+<script src="{{asset('plugins/jquery-loader-plugins.js')}}"></script>
 @stop
 
 @section('header_script')

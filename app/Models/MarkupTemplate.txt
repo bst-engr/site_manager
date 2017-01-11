@@ -1,0 +1,47 @@
+$data[]= array(
+                        'domain' => "*.*",
+                        'catMarkup' => 0.15,
+                        'mtpMarkup' => 0.15,
+                        'fibermarkup' =>0.15,
+                        'domainLevel' => "admin",
+                        'attachCsvFlag' => "Yes",
+                        'costColunmName' => "",
+                        'preffered'      => "Yes",  
+                        'fkCustomerID' => $customer,                                  
+                    );
+
+$data[]= array(
+                        'domain' => "*.*",
+                        'catMarkup' => 0.15,
+                        'mtpMarkup' => 0.15,
+                        'fibermarkup' =>0.15,
+                        'domainLevel' => "re-seller",
+                        'attachCsvFlag' => "No",
+                        'costColunmName' => "",
+                        'preffered'      => "Yes",  
+                        'fkCustomerID' => $customer,                                  
+                    );
+
+$data[]= array(
+                        'domain' => "*.*",
+                        'catMarkup' => 0.15,
+                        'mtpMarkup' => 0.15,
+                        'fibermarkup' =>0.15,
+                        'domainLevel' => "end-user",
+                        'attachCsvFlag' => "No",
+                        'costColunmName' => "",
+                        'preffered'      => "Yes",  
+                        'fkCustomerID' => $customer,                                  
+                    );
+
+$data[]= array(
+                        'domain' => "*.*",
+                        'catMarkup' => 0.15,
+                        'mtpMarkup' => 0.15,
+                        'fibermarkup' =>0.15,
+                        'domainLevel' => "sales-rep",
+                        'attachCsvFlag' => "Yes",
+                        'costColunmName' => "",
+                        'preffered'      => "Yes",  
+                        'fkCustomerID' => $customer,                                  
+                    );

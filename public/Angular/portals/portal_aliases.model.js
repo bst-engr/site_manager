@@ -30,8 +30,10 @@ angular.module('portalAliasModel',['httpServiceModel']).factory('Alias', ['$http
         return $http.post(httpService.getUrl('aliases'+ customer), {siteName:name});
     }
 
-    Alias.editAlias = function (lp,ld,customerID,siteName,part,description,rowform) {
+    Alias.editAlias = function (lp,ld,dbrefPart,customerID,siteName,part,description,rowform) {
         
+        /*
+
         if(Alias.lastPart!='')
         lp=Alias.lastPart;
         
@@ -40,9 +42,10 @@ angular.module('portalAliasModel',['httpServiceModel']).factory('Alias', ['$http
         
         Alias.lastPart=part;
         Alias.description=description;
+        */
 
         var customer = '/edit/editAliases';
-        return $http.post(httpService.getUrl('aliases'+ customer), {lastPart:lp,lastDescription:ld,fkCustomerID:customerID,site:siteName,aliasPart:part,aliasDescription:description});
+        return $http.post(httpService.getUrl('aliases'+ customer), {lastPart:lp,lastDescription:ld,fkCustomerID:customerID,site:siteName,aliasPart:part,aliasDescription:description,dbref:dbrefPart});
        
     }
 

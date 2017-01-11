@@ -16,6 +16,15 @@ angular.module('QuoteModel',['httpServiceModel']).factory('Quote', ['$http', 'ht
                 'footerMiddle': '',
                 'fkCustomerID': '',
                 'customPartColor': '',
+                'adminCcEmail':'',
+                'smtpHost': '',
+                'smtpPort': '',
+                'smtpUser': '',
+                'smtpPassword': '',
+                'mailFrom': '',
+                'fromName': '',
+                'noReplyEmail': '',
+                'costColumnAlias':'',
                 'id': null
             },
             errors: []
